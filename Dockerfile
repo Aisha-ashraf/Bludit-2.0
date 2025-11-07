@@ -11,8 +11,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd mbstring zip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install gd mbstring zip
 
 # Enable Apache rewrite module
 RUN a2enmod rewrite
@@ -20,10 +19,13 @@ RUN a2enmod rewrite
 # Copy Bludit files into the container
 COPY . /var/www/html/
 
-# Set correct ownership and permissions
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 775 /var/www/html/bl-content && \
-    chmod 664 /var/www/html/.htaccess || true
+# Allow .htaccess and fix permissions
+RUN echo "<Directory /var/www/html/> \n\
+    AllowOverride All \n\
+    Require all granted \n\
+    </Directory>" > /etc/apache2/conf-available/bludit.conf \
+    && a2enconf bludit \
+    && chown -R www-data:www-data /var/www/html
 
 # Expose port 80
 EXPOSE 80
