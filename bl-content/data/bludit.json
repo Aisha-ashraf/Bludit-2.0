@@ -1,0 +1,9 @@
+{
+  "siteTitle": "My Bludit Site",
+  "siteDescription": "Just another Bludit site",
+  "siteUrl": "https://bludit-2-0.onrender.com",
+  "siteLanguage": "en",
+  "timezone": "Asia/Kolkata",
+  "contentPerPage": 10,
+  "theme": "default"
+}
